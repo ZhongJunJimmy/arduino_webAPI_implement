@@ -4,6 +4,7 @@
 //Constants
 #define DHTPIN 7     // what pin we're connected to
 #define DHTTYPE DHT22   // DHT 22  (AM2302)
+//#define DEBUG
 DHT dht(DHTPIN, DHTTYPE); //// Initialize DHT sensor for normal 16mhz Arduino
 
 float hum;  //Stores humidity value
@@ -40,20 +41,34 @@ void loop(){
   temp= dht.readTemperature();
   // Construct a response:
   char body[4096];
-  int pos;
+  word len = ether.packetReceive();
+  word pos = ether.packetLoop(len);
+  int request;
 
   // Wait for an incoming TCP packet, but ignore its contents.
-  if (!ether.packetLoop(ether.packetReceive())) {
+  if (!pos) {
     return;
   }
-    
-  pos += sprintf(body+pos, "%s", "{\"roomInfo\":{\"humidity\":");
-  pos += sprintf(body+pos, "%s", dtostrf(hum, 0, 2, body+pos));
-  pos += sprintf(body+pos, "%s", ",\"temperature\":");
-  pos += sprintf(body+pos, "%s", dtostrf(temp, 0, 2, body+pos));
-  pos += sprintf(body+pos, "%s", "}}");
 
-  respond(body, ++pos);
+  char* data = (char *) Ethernet::buffer + pos;
+#ifdef DEBUG
+  //Serial.println(data);
+  Serial.print("humidity: ");
+  Serial.println(hum);
+  Serial.print("temperature: ");
+  Serial.println(temp);
+#endif
+  if (strncmp("GET /getdht",data,11) == 0){
+    request += sprintf(body+request, "%s", "{\"roomInfo\":{\"humidity\":");
+    request += sprintf(body+request, "%s", dtostrf(hum, 0, 2, body+request));
+    request += sprintf(body+request, "%s", ",\"temperature\":");
+    request += sprintf(body+request, "%s", dtostrf(temp, 0, 2, body+request));
+    request += sprintf(body+request, "%s", "}}");
+
+    respond(body, ++request);
+  }
+    
+  
 }
 
 void respond(char *body, int size) {
