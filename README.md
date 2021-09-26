@@ -6,22 +6,8 @@
 3. DHT 22 溫濕度感測器
 
 #### 接線說明:
-1. ENC28J60 Module
-	VCC		-> 3v3
-	CLKOUT	->
-	ENC-WOL	->
-	RESET	-> RESET
-	ENC-INT	-> pin 2
-	GND		-> GND
-	SCK		-> pin 13
-	MIDO	-> pin 12
-	MOSI	-> pin 11
-	CS		-> pin 10
-2. DHT 22 Module
-	VCC		-> 5v
-	DATA	-> pin 7
-	NC		->
-	GND		-> GND
+#### 接線說明:
+![image](https://github.com/xiguanTw/arduino_webAPI_implement/blob/main/image/pins.png?raw=true)
 
 #### 程式庫:
 1. EtherCard
