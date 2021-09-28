@@ -14,4 +14,4 @@
 2. DHT
 
 #### 說明:
-> 燒錄至Arduino UNO板後，可透過send GET request給 http://[IP]/getdht ，取得DHT22模組之檢測數值。
+- 燒錄至Arduino UNO板後，可透過send GET request給 http://[IP]/getdht ，取得DHT22模組之檢測數值。
